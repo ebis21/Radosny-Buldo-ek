@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radosny Buldożek — Salon Pielęgnacji Psów i Kotów | Jelenia Góra</title>
+<meta name="description" content="Radosny Buldożek — salon pielęgnacji psów i kotów w Jeleniej Górze. Kąpiel, strzyżenie, trymowanie, pielęgnacja kotów. Umów wizytę dla swojego pupila!">
+
+<!-- ===== GOOGLE FONTS: Fredoka (display) + Nunito (tekst) ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================================
+   RADOSNY BULDOŻEK — landing page (demo sprzedażowe)
+   Jeden plik, bez zależności. CSS + JS osadzone.
+   Paleta: słoneczny żółty + koralowy + głęboki granat + krem.
+   ========================================================================= */
+
+/* ---------- ZMIENNE / DESIGN TOKENS ---------- */
+:root{
+  --zolty:      #FFC83D;   /* słoneczny żółty   */
+  --zolty-jasny:#FFE08A;
+  --koral:      #FF6B5E;   /* koralowy          */
+  --koral-ciem: #F1493B;
+  --granat:     #1E2A53;   /* głęboki granat    */
+  --granat-2:   #2A3A6E;
+  --krem:       #FFF8EC;   /* kremowe tło       */
+  --krem-2:     #FFEFD6;
+  --bialy:      #FFFFFF;
+  --mieta:      #46C7A8;   /* dodatkowy akcent  */
+  --rozowy:     #FF9FB2;
+
+  --cien-mala:  0 4px 14px rgba(30,42,83,.10);
+  --cien-srednia:0 12px 32px rgba(30,42,83,.16);
+  --cien-duza:  0 24px 60px rgba(30,42,83,.22);
+
+  --r-s: 16px;
+  --r-m: 24px;
+  --r-l: 34px;
+  --r-xl: 48px;
+
+  --font-display:'Fredoka', system-ui, sans-serif;
+  --font-tekst:'Nunito', system-ui, sans-serif;
+
+  --maks-szer: 1200px;
+  --gap: clamp(14px, 2vw, 22px);
+}
+
+/* ---------- RESET ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-tekst);
+  color:var(--granat);
+  background:var(--krem);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+ul{list-style:none}
+
+h1,h2,h3,.display{font-family:var(--font-display);font-weight:700;line-height:1.05;letter-spacing:-.01em}
+
+/* ---------- POMOCNICZE ---------- */
+.kontener{width:min(100% - 36px, var(--maks-szer));margin-inline:auto}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-display);font-weight:600;font-size:.8rem;
+  text-transform:uppercase;letter-spacing:.14em;
+  color:var(--koral-ciem);
+  background:var(--krem-2);
+  padding:7px 16px;border-radius:999px;
+}
+.sekcja-tytul{
+  font-size:clamp(1.9rem, 4.5vw, 3.1rem);
+  margin:.4em 0 .25em;
+}
+.sekcja-tytul .hl{color:var(--koral);position:relative;white-space:nowrap}
+.sekcja-opis{max-width:54ch;color:#54618a;font-size:1.05rem;font-weight:600}
+
+/* =========================================================================
+   STICKY NAV
+   ========================================================================= */
+.nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(255,248,236,.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:2px solid rgba(30,42,83,.06);
+  transition:box-shadow .3s, background .3s;
+}
+.nav.scrolled{box-shadow:var(--cien-mala);background:rgba(255,248,236,.94)}
+.nav__in{
+  display:flex;align-items:center;justify-content:space-between;
+  height:68px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.25rem}
+.brand__logo{width:40px;height:40px;flex:0 0 auto}
+.brand__logo svg{width:100%;height:100%}
+.brand b{color:var(--koral)}
+
+.nav__links{display:none;gap:6px;align-items:center}
+.nav__links a{
+  font-weight:800;font-size:.95rem;padding:9px 14px;border-radius:999px;
+  color:var(--granat);transition:background .2s,color .2s,transform .2s;
+}
+.nav__links a:hover{background:var(--zolty);transform:translateY(-2px)}
+.nav__cta{
+  display:none;
+  font-family:var(--font-display);font-weight:600;
+  background:var(--granat);color:#fff;padding:11px 22px;border-radius:999px;
+  box-shadow:var(--cien-mala);transition:transform .2s,box-shadow .2s,background .2s;
+}
+.nav__cta:hover{transform:translateY(-2px) scale(1.03);box-shadow:var(--cien-srednia);background:var(--koral)}
+
+/* hamburger (mobile) */
+.burger{display:flex;flex-direction:column;gap:5px;padding:8px}
+.burger span{width:26px;height:3px;background:var(--granat);border-radius:3px;transition:.3s}
+.burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+
+.mobile-menu{
+  display:grid;gap:4px;
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease;
+  border-top:0 solid transparent;
+}
+.mobile-menu.open{max-height:420px;padding:10px 0 18px;border-top:2px solid rgba(30,42,83,.06)}
+.mobile-menu a{font-weight:800;padding:12px 14px;border-radius:14px}
+.mobile-menu a:hover{background:var(--krem-2)}
+.mobile-menu .nav__cta{display:inline-flex;justify-content:center;margin-top:8px}
+
+@media(min-width:920px){
+  .nav__links{display:flex}
+  .nav__cta{display:inline-flex}
+  .burger{display:none}
+  .mobile-menu{display:none}
+}
+
+/* =========================================================================
+   HERO
+   ========================================================================= */
+.hero{
+  position:relative;
+  padding:clamp(34px,6vw,70px) 0 clamp(40px,7vw,90px);
+  overflow:hidden;
+}
+/* animowane, ruszające się tło-gradient */
+.hero__bg{
+  position:absolute;inset:-20% -10% -10% -10%;z-index:0;
+  background:
+    radial-gradient(42% 50% at 18% 22%, var(--zolty) 0%, transparent 60%),
+    radial-gradient(46% 52% at 86% 18%, var(--rozowy) 0%, transparent 58%),
+    radial-gradient(50% 55% at 75% 88%, var(--mieta) 0%, transparent 60%),
+    radial-gradient(48% 50% at 25% 92%, var(--koral) 0%, transparent 58%);
+  filter:blur(8px);
+  opacity:.55;
+  animation:drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  0%{transform:scale(1) translate(0,0)}
+  50%{transform:scale(1.12) translate(2%,-2%)}
+  100%{transform:scale(1.05) translate(-2%,2%)}
+}
+/* pływające łapki w tle */
+.paw-float{position:absolute;z-index:0;opacity:.22;color:var(--granat);animation:bobbing 7s ease-in-out infinite}
+.paw-float svg{width:100%;height:100%}
+.paw-float.p1{width:54px;top:14%;left:6%;animation-delay:.2s;color:var(--koral)}
+.paw-float.p2{width:38px;top:62%;left:12%;animation-delay:1.4s;color:var(--granat)}
+.paw-float.p3{width:46px;top:24%;right:8%;animation-delay:.8s;color:var(--mieta)}
+.paw-float.p4{width:30px;top:74%;right:16%;animation-delay:2s;color:var(--koral)}
+@keyframes bobbing{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-16px) rotate(8deg)}}
+
+.hero__grid{
+  position:relative;z-index:2;
+  display:grid;gap:var(--gap);
+  grid-template-columns:1fr;
+  align-items:center;
+}
+.hero__copy .eyebrow{background:rgba(255,255,255,.7)}
+.hero__title{
+  font-size:clamp(2.6rem, 9vw, 5rem);
+  margin:.28em 0 .2em;
+  font-weight:700;
+}
+.hero__title .word{display:inline-block;animation:popIn .7s cubic-bezier(.2,1.4,.4,1) backwards}
+.hero__title .word:nth-child(1){animation-delay:.05s;color:var(--granat)}
+.hero__title .word:nth-child(2){animation-delay:.18s;color:var(--koral)}
+@keyframes popIn{from{opacity:0;transform:translateY(28px) scale(.86) rotate(-4deg)}to{opacity:1;transform:none}}
+.hero__sub{font-size:clamp(1.05rem,2.4vw,1.3rem);font-weight:800;color:var(--granat-2);max-width:30ch}
+.hero__sub .pin{color:var(--koral)}
+.hero__pills{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 6px}
+.hero__pill{
+  background:#fff;border:2px solid rgba(30,42,83,.08);
+  padding:8px 15px;border-radius:999px;font-weight:800;font-size:.9rem;
+  box-shadow:var(--cien-mala);
+}
+.hero__cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:24px}
+.btn{
+  font-family:var(--font-display);font-weight:600;font-size:1.05rem;
+  padding:15px 30px;border-radius:999px;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:transform .2s, box-shadow .2s, background .2s;
+  will-change:transform;
+}
+.btn--primary{background:var(--koral);color:#fff;box-shadow:0 12px 26px rgba(241,73,59,.36)}
+.btn--primary:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 18px 36px rgba(241,73,59,.45)}
+.btn--primary:active{transform:translateY(0) scale(.98)}
+.btn--ghost{background:#fff;color:var(--granat);box-shadow:var(--cien-mala)}
+.btn--ghost:hover{transform:translateY(-3px);box-shadow:var(--cien-srednia);background:var(--zolty)}
+
+/* maskotka */
+.hero__mascot{
+  position:relative;justify-self:center;
+  width:min(86vw,420px);
+  filter:drop-shadow(0 26px 40px rgba(30,42,83,.28));
+}
+.mascot-stage{position:relative;animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.015)}}
+.mascot-bubble{
+  position:absolute;top:-6%;right:-4%;z-index:3;
+  background:#fff;border:3px solid var(--granat);
+  font-family:var(--font-display);font-weight:600;
+  padding:10px 16px;border-radius:18px 18px 18px 4px;
+  box-shadow:var(--cien-srednia);
+  animation:floatBubble 3.4s ease-in-out infinite;
+}
+.mascot-bubble::after{content:"";position:absolute;left:14px;bottom:-12px;width:0;height:0;border:8px solid transparent;border-top-color:var(--granat)}
+@keyframes floatBubble{0%,100%{transform:translateY(0) rotate(2deg)}50%{transform:translateY(-8px) rotate(-2deg)}}
+
+/* =========================================================================
+   BENTO GRID — wspólny system
+   ========================================================================= */
+.bento{
+  display:grid;gap:var(--gap);
+  grid-template-columns:repeat(2,1fr);
+}
+.tile{
+  background:#fff;border-radius:var(--r-l);
+  padding:clamp(20px,3vw,32px);
+  box-shadow:var(--cien-mala);
+  position:relative;overflow:hidden;
+  border:2px solid rgba(30,42,83,.05);
+  transition:transform .35s cubic-bezier(.2,1,.3,1), box-shadow .35s;
+}
+.tile:hover{transform:translateY(-7px) rotate(-.6deg);box-shadow:var(--cien-duza)}
+.tile h3{font-size:1.3rem;margin-bottom:.4em}
+.tile p{color:#54618a;font-weight:600}
+
+/* kolorowe warianty kafelków */
+.tile--zolty{background:linear-gradient(150deg,var(--zolty) 0%, var(--zolty-jasny) 100%);border-color:transparent}
+.tile--koral{background:linear-gradient(150deg,var(--koral) 0%, #ff8a7e 100%);color:#fff;border-color:transparent}
+.tile--koral p,.tile--koral h3{color:#fff}
+.tile--granat{background:linear-gradient(155deg,var(--granat) 0%, var(--granat-2) 100%);color:#fff;border-color:transparent}
+.tile--granat p{color:#c7d0ee}
+.tile--mieta{background:linear-gradient(150deg,var(--mieta) 0%, #6fdcc1 100%);color:#fff;border-color:transparent}
+.tile--mieta p{color:#eafff8}
+
+/* spany na desktop */
+@media(min-width:760px){
+  .span-2{grid-column:span 2}
+  .row-2{grid-row:span 2}
+}
+
+/* =========================================================================
+   O NAS
+   ========================================================================= */
+.about{padding:clamp(46px,7vw,90px) 0}
+.about .bento{grid-template-columns:repeat(2,1fr)}
+.about__intro{display:flex;flex-direction:column;justify-content:center}
+.about__big{
+  font-size:clamp(2rem,5vw,3.4rem);
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;
+}
+.about__big .num{color:var(--koral)}
+.feature-ico{
+  width:54px;height:54px;border-radius:16px;display:grid;place-items:center;
+  background:rgba(255,255,255,.25);font-size:1.7rem;margin-bottom:14px;
+}
+.tile--zolty .feature-ico{background:rgba(30,42,83,.12)}
+
+@media(min-width:760px){
+  .about .bento{grid-template-columns:1.3fr 1fr 1fr}
+}
+
+/* =========================================================================
+   OFERTA — przełącznik PSY / KOTY
+   ========================================================================= */
+.oferta{padding:clamp(46px,7vw,90px) 0;position:relative}
+.oferta__head{text-align:center;display:flex;flex-direction:column;align-items:center;margin-bottom:30px}
+.switch{
+  display:inline-flex;background:#fff;border:3px solid var(--granat);
+  border-radius:999px;padding:6px;margin-top:22px;gap:4px;
+  box-shadow:var(--cien-srednia);position:relative;
+}
+.switch__btn{
+  font-family:var(--font-display);font-weight:600;font-size:1.05rem;
+  padding:11px 26px;border-radius:999px;color:var(--granat);
+  display:inline-flex;align-items:center;gap:9px;transition:color .3s;z-index:2;
+}
+.switch__btn .emo{font-size:1.3rem;transition:transform .3s}
+.switch__btn:hover .emo{transform:scale(1.25) rotate(-8deg)}
+.switch__thumb{
+  position:absolute;top:6px;bottom:6px;left:6px;width:calc(50% - 6px);
+  background:var(--koral);border-radius:999px;z-index:1;
+  transition:transform .4s cubic-bezier(.5,1.6,.4,1);
+}
+.switch[data-active="koty"] .switch__thumb{transform:translateX(100%)}
+.switch[data-active="psy"] .switch__btn[data-tab="psy"],
+.switch[data-active="koty"] .switch__btn[data-tab="koty"]{color:#fff}
+
+.oferta-grid{display:none}
+.oferta-grid.active{display:grid;animation:tabIn .5s cubic-bezier(.2,1,.3,1)}
+@keyframes tabIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.usluga{
+  background:#fff;border-radius:var(--r-m);padding:26px;
+  box-shadow:var(--cien-mala);border:2px solid rgba(30,42,83,.05);
+  transition:transform .3s, box-shadow .3s;position:relative;overflow:hidden;
+}
+.usluga::before{content:"";position:absolute;inset:auto -30px -30px auto;width:120px;height:120px;border-radius:50%;background:var(--krem-2);opacity:.7;transition:transform .4s}
+.usluga:hover{transform:translateY(-7px) rotate(.5deg);box-shadow:var(--cien-duza)}
+.usluga:hover::before{transform:scale(1.5)}
+.usluga__ico{
+  position:relative;z-index:2;
+  width:62px;height:62px;border-radius:18px;display:grid;place-items:center;
+  font-size:2rem;background:var(--zolty);margin-bottom:16px;
+  transition:transform .3s;
+}
+.usluga:hover .usluga__ico{animation:wiggle .6s ease}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(6deg)}}
+.usluga h3{position:relative;z-index:2;font-size:1.22rem;margin-bottom:6px}
+.usluga p{position:relative;z-index:2;color:#54618a;font-weight:600;font-size:.96rem}
+.usluga__cena{
+  position:relative;z-index:2;display:inline-block;margin-top:14px;
+  font-family:var(--font-display);font-weight:600;font-size:1.05rem;
+  color:var(--koral-ciem);background:var(--krem-2);padding:5px 14px;border-radius:999px;
+}
+.usluga__cena small{color:#8a93b5;font-weight:700}
+
+/* warianty ikon kolorystycznie */
+.usluga:nth-child(2) .usluga__ico{background:var(--rozowy)}
+.usluga:nth-child(3) .usluga__ico{background:var(--mieta)}
+.usluga:nth-child(4) .usluga__ico{background:var(--zolty)}
+.usluga:nth-child(5) .usluga__ico{background:var(--koral);color:#fff}
+.usluga:nth-child(6) .usluga__ico{background:var(--granat);color:#fff}
+
+/* =========================================================================
+   CENNIK
+   ========================================================================= */
+.cennik{padding:clamp(46px,7vw,90px) 0}
+.cennik__grid{display:grid;gap:var(--gap);grid-template-columns:1fr}
+.plan{
+  background:#fff;border-radius:var(--r-l);padding:34px 30px;
+  box-shadow:var(--cien-mala);border:2px solid rgba(30,42,83,.06);
+  position:relative;transition:transform .3s, box-shadow .3s;
+}
+.plan:hover{transform:translateY(-8px);box-shadow:var(--cien-duza)}
+.plan--polecany{
+  background:linear-gradient(165deg,var(--granat),var(--granat-2));color:#fff;
+  border-color:transparent;transform:scale(1.02);
+}
+.plan--polecany:hover{transform:translateY(-8px) scale(1.02)}
+.plan__tag{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--zolty);color:var(--granat);font-family:var(--font-display);font-weight:600;
+  padding:6px 18px;border-radius:999px;font-size:.85rem;box-shadow:var(--cien-mala);white-space:nowrap;
+}
+.plan h3{font-size:1.5rem}
+.plan__price{font-family:var(--font-display);font-weight:700;font-size:2.6rem;margin:.2em 0}
+.plan__price small{font-size:.9rem;font-weight:700;color:#8a93b5}
+.plan--polecany .plan__price small{color:#aab6e0}
+.plan__list{margin:18px 0 26px;display:grid;gap:11px}
+.plan__list li{display:flex;align-items:flex-start;gap:10px;font-weight:700;color:#54618a}
+.plan--polecany .plan__list li{color:#dfe6ff}
+.plan__list .check{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--mieta);color:#fff;display:grid;place-items:center;font-size:.75rem;font-weight:900;margin-top:2px}
+.plan .btn{width:100%;justify-content:center;font-size:1rem}
+.plan--polecany .btn--ghost{background:var(--zolty)}
+
+@media(min-width:820px){.cennik__grid{grid-template-columns:repeat(3,1fr);align-items:center}}
+
+/* =========================================================================
+   GALERIA przed/po
+   ========================================================================= */
+.galeria{padding:clamp(46px,7vw,90px) 0}
+.galeria__grid{
+  display:grid;gap:var(--gap);
+  grid-template-columns:repeat(2,1fr);
+}
+.gitem{
+  position:relative;border-radius:var(--r-m);overflow:hidden;cursor:pointer;
+  box-shadow:var(--cien-mala);aspect-ratio:1/1;
+  transition:transform .35s, box-shadow .35s;
+}
+.gitem img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.gitem:hover{transform:translateY(-6px);box-shadow:var(--cien-duza)}
+.gitem:hover img{transform:scale(1.09)}
+.gitem__badge{
+  position:absolute;top:12px;left:12px;z-index:2;
+  background:rgba(30,42,83,.85);color:#fff;font-family:var(--font-display);font-weight:600;
+  padding:5px 13px;border-radius:999px;font-size:.78rem;backdrop-filter:blur(4px);
+}
+.gitem__zoom{
+  position:absolute;inset:0;display:grid;place-items:center;z-index:2;
+  background:linear-gradient(transparent 55%, rgba(30,42,83,.45));
+  opacity:0;transition:opacity .3s;
+}
+.gitem:hover .gitem__zoom{opacity:1}
+.gitem__zoom span{
+  background:#fff;color:var(--granat);width:46px;height:46px;border-radius:50%;
+  display:grid;place-items:center;font-size:1.3rem;transform:scale(.7);transition:transform .3s;
+  box-shadow:var(--cien-srednia);
+}
+.gitem:hover .gitem__zoom span{transform:scale(1)}
+@media(min-width:680px){.galeria__grid{grid-template-columns:repeat(4,1fr)}.gitem.big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}}
+
+/* LIGHTBOX */
+.lightbox{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(20,28,56,.86);backdrop-filter:blur(8px);
+  display:none;place-items:center;padding:20px;
+  opacity:0;transition:opacity .3s;
+}
+.lightbox.open{display:grid;opacity:1}
+.lightbox img{
+  max-width:min(92vw,900px);max-height:84vh;border-radius:var(--r-m);
+  box-shadow:var(--cien-duza);border:4px solid #fff;
+  animation:lbIn .4s cubic-bezier(.2,1.3,.4,1);
+}
+@keyframes lbIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.lightbox__close,.lightbox__nav{
+  position:absolute;background:#fff;color:var(--granat);
+  width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  font-size:1.4rem;font-weight:900;box-shadow:var(--cien-srednia);transition:transform .2s, background .2s;
+}
+.lightbox__close{top:22px;right:22px}
+.lightbox__nav{top:50%;transform:translateY(-50%)}
+.lightbox__nav.prev{left:18px}
+.lightbox__nav.next{right:18px}
+.lightbox__close:hover,.lightbox__nav:hover{transform:scale(1.12);background:var(--zolty)}
+.lightbox__nav:hover{transform:translateY(-50%) scale(1.12)}
+
+/* =========================================================================
+   STATYSTYKI
+   ========================================================================= */
+.staty{padding:clamp(46px,7vw,90px) 0}
+.staty__box{
+  background:linear-gradient(160deg,var(--granat) 0%, #16224a 100%);
+  border-radius:var(--r-xl);padding:clamp(34px,5vw,64px);
+  position:relative;overflow:hidden;color:#fff;
+}
+.staty__box::before,.staty__box::after{content:"";position:absolute;border-radius:50%;filter:blur(2px)}
+.staty__box::before{width:240px;height:240px;background:radial-gradient(circle,var(--koral),transparent 70%);top:-60px;right:-40px;opacity:.5}
+.staty__box::after{width:200px;height:200px;background:radial-gradient(circle,var(--zolty),transparent 70%);bottom:-50px;left:-30px;opacity:.4}
+.staty__grid{position:relative;z-index:2;display:grid;gap:30px;grid-template-columns:repeat(2,1fr);text-align:center}
+.stat__num{font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,7vw,4rem);line-height:1;color:var(--zolty)}
+.stat:nth-child(2) .stat__num{color:var(--koral)}
+.stat:nth-child(3) .stat__num{color:var(--mieta)}
+.stat:nth-child(4) .stat__num{color:var(--rozowy)}
+.stat__label{font-weight:800;margin-top:8px;color:#c7d0ee;font-size:.98rem}
+@media(min-width:760px){.staty__grid{grid-template-columns:repeat(4,1fr)}}
+
+/* =========================================================================
+   OPINIE
+   ========================================================================= */
+.opinie{padding:clamp(46px,7vw,90px) 0}
+.opinie__grid{display:grid;gap:var(--gap);grid-template-columns:1fr}
+.opinia{
+  background:#fff;border-radius:var(--r-l);padding:30px;
+  box-shadow:var(--cien-mala);border:2px solid rgba(30,42,83,.05);
+  position:relative;transition:transform .3s, box-shadow .3s;
+}
+.opinia:hover{transform:translateY(-6px) rotate(-.6deg);box-shadow:var(--cien-duza)}
+.opinia__quote{font-family:var(--font-display);font-size:3rem;line-height:.6;color:var(--zolty);position:absolute;top:22px;right:26px}
+.opinia__stars{color:var(--zolty);font-size:1.1rem;letter-spacing:2px;margin-bottom:12px}
+.opinia p{font-weight:700;color:var(--granat-2);font-size:1.02rem}
+.opinia__autor{display:flex;align-items:center;gap:12px;margin-top:20px}
+.opinia__av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;color:#fff;background:var(--koral);font-size:1.1rem}
+.opinia:nth-child(2) .opinia__av{background:var(--mieta)}
+.opinia:nth-child(3) .opinia__av{background:var(--granat)}
+.opinia__autor b{display:block;font-family:var(--font-display)}
+.opinia__autor small{color:#8a93b5;font-weight:700}
+@media(min-width:820px){.opinie__grid{grid-template-columns:repeat(3,1fr)}}
+
+/* =========================================================================
+   REZERWACJA / KONTAKT
+   ========================================================================= */
+.rezerwacja{padding:clamp(46px,7vw,90px) 0}
+.rez__grid{display:grid;gap:var(--gap);grid-template-columns:1fr}
+.form-card{
+  background:#fff;border-radius:var(--r-l);padding:clamp(24px,3.4vw,40px);
+  box-shadow:var(--cien-srednia);border:2px solid rgba(30,42,83,.06);
+}
+.form-row{display:grid;gap:16px;grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:800;font-size:.92rem}
+.field label .req{color:var(--koral)}
+.field input,.field select{
+  font-family:inherit;font-weight:700;font-size:1rem;color:var(--granat);
+  padding:13px 15px;border-radius:14px;border:2px solid rgba(30,42,83,.12);
+  background:var(--krem);transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--koral);background:#fff;box-shadow:0 0 0 4px rgba(255,107,94,.15)}
+.field input::placeholder{color:#a6adc4;font-weight:600}
+.field.invalid input,.field.invalid select{border-color:var(--koral-ciem);background:#fff2f0}
+.field__err{color:var(--koral-ciem);font-size:.82rem;font-weight:800;display:none}
+.field.invalid .field__err{display:block}
+
+/* segment gatunek */
+.gatunek{display:flex;gap:10px}
+.gatunek input{position:absolute;opacity:0;pointer-events:none}
+.gatunek label{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;border-radius:14px;border:2px solid rgba(30,42,83,.12);
+  background:var(--krem);font-weight:800;cursor:pointer;transition:.2s;
+}
+.gatunek label .emo{font-size:1.3rem}
+.gatunek input:checked + label{border-color:var(--koral);background:var(--krem-2);box-shadow:0 0 0 3px rgba(255,107,94,.15)}
+
+.form-card .btn{width:100%;justify-content:center;margin-top:6px;font-size:1.1rem}
+.form-note{font-size:.84rem;color:#8a93b5;font-weight:700;margin-top:12px;text-align:center}
+
+.form-ok{
+  display:none;text-align:center;padding:24px 10px;
+  animation:tabIn .5s cubic-bezier(.2,1,.3,1);
+}
+.form-ok.show{display:block}
+.form-ok .ok-emo{font-size:3.4rem;animation:popIn .6s cubic-bezier(.2,1.4,.4,1)}
+.form-ok h3{font-size:1.8rem;margin:.3em 0}
+.form-ok p{color:#54618a;font-weight:700}
+
+/* kontakt / dane */
+.kontakt-info{display:flex;flex-direction:column;gap:var(--gap)}
+.info-card{
+  background:linear-gradient(160deg,var(--koral),#ff8a7e);color:#fff;
+  border-radius:var(--r-l);padding:30px;box-shadow:var(--cien-mala);
+}
+.info-card.granat{background:linear-gradient(160deg,var(--granat),var(--granat-2))}
+.info-list{display:grid;gap:16px;margin-top:8px}
+.info-list li{display:flex;align-items:flex-start;gap:13px;font-weight:700}
+.info-list .ico{flex:0 0 auto;width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:1.2rem}
+.info-list b{display:block;font-family:var(--font-display);font-weight:600}
+.info-list small{opacity:.85;font-weight:700}
+.mapa{
+  border-radius:var(--r-l);overflow:hidden;box-shadow:var(--cien-mala);
+  background:repeating-linear-gradient(45deg,var(--krem-2),var(--krem-2) 16px,#fff 16px,#fff 32px);
+  min-height:200px;display:grid;place-items:center;text-align:center;color:#8a93b5;font-weight:800;border:2px dashed rgba(30,42,83,.15);
+  position:relative;
+}
+.mapa span{background:rgba(255,255,255,.85);padding:14px 20px;border-radius:14px}
+
+@media(min-width:900px){.rez__grid{grid-template-columns:1.25fr .9fr}.form-row.dwa{grid-template-columns:1fr 1fr}}
+
+/* =========================================================================
+   STOPKA
+   ========================================================================= */
+.stopka{background:var(--granat);color:#c7d0ee;padding:clamp(40px,6vw,70px) 0 26px;position:relative;overflow:hidden}
+.stopka::before{content:"";position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:120%;height:60px;background:var(--krem);border-radius:50%}
+.stopka__grid{display:grid;gap:30px;grid-template-columns:1fr;position:relative;z-index:2;padding-top:30px}
+.stopka__brand{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--font-display);font-weight:700;font-size:1.4rem}
+.stopka__brand .brand__logo{width:46px;height:46px}
+.stopka h4{color:#fff;font-family:var(--font-display);font-weight:600;margin-bottom:14px;font-size:1.1rem}
+.stopka a:hover{color:var(--zolty)}
+.godziny{display:grid;gap:7px}
+.godziny li{display:flex;justify-content:space-between;gap:14px;font-weight:700;border-bottom:1px dashed rgba(255,255,255,.12);padding-bottom:6px;max-width:260px}
+.godziny .dz{color:#fff}
+.socials{display:flex;gap:10px;margin-top:6px}
+.socials a{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:1.2rem;transition:.25s}
+.socials a:hover{background:var(--koral);transform:translateY(-4px) rotate(-6deg);color:#fff}
+.foot-links{display:grid;gap:9px}
+.foot-links a{font-weight:700}
+.copyright{
+  text-align:center;margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+  font-weight:700;font-size:.9rem;position:relative;z-index:2;
+}
+.copyright b{color:#fff}
+@media(min-width:760px){.stopka__grid{grid-template-columns:1.4fr 1fr 1fr}}
+
+/* =========================================================================
+   SCROLL-REVEAL
+   ========================================================================= */
+.reveal{opacity:0;transform:translateY(40px) scale(.97)}
+.reveal.in{
+  opacity:1;transform:none;
+  transition:opacity .7s cubic-bezier(.2,1,.3,1), transform .7s cubic-bezier(.34,1.56,.5,1);
+}
+.reveal[data-delay="1"].in{transition-delay:.08s}
+.reveal[data-delay="2"].in{transition-delay:.16s}
+.reveal[data-delay="3"].in{transition-delay:.24s}
+.reveal[data-delay="4"].in{transition-delay:.32s}
+.reveal[data-delay="5"].in{transition-delay:.40s}
+
+/* confetti / łapki canvas */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:300}
+
+/* =========================================================================
+   PREFERS-REDUCED-MOTION — wyłącz animacje
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .reveal{opacity:1;transform:none}
+  .hero__bg{animation:none}
+  .mascot-stage{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     NAWIGACJA (sticky, z kotwicami)
+     ===================================================================== -->
+<header class="nav" id="nav">
+  <div class="kontener nav__in">
+    <a href="#hero" class="brand" aria-label="Radosny Buldożek — strona główna">
+      <span class="brand__logo">
+        <!-- mini logo buldożka -->
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="30" fill="#FFC83D"/>
+          <ellipse cx="18" cy="22" rx="9" ry="11" fill="#1E2A53"/>
+          <ellipse cx="46" cy="22" rx="9" ry="11" fill="#1E2A53"/>
+          <circle cx="32" cy="34" r="20" fill="#FFF8EC"/>
+          <circle cx="24" cy="30" r="3.4" fill="#1E2A53"/>
+          <circle cx="40" cy="30" r="3.4" fill="#1E2A53"/>
+          <ellipse cx="32" cy="40" rx="5" ry="3.6" fill="#FF6B5E"/>
+          <path d="M26 46 Q32 51 38 46" stroke="#1E2A53" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>Radosny <b>Buldożek</b></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Menu główne">
+      <a href="#o-nas">O nas</a>
+      <a href="#oferta">Oferta</a>
+      <a href="#cennik">Cennik</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#opinie">Opinie</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+
+    <a href="#kontakt" class="nav__cta">Umów wizytę 🐾</a>
+
+    <button class="burger" id="burger" aria-label="Otwórz menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- menu mobilne -->
+  <div class="kontener">
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Menu mobilne">
+      <a href="#o-nas">O nas</a>
+      <a href="#oferta">Oferta</a>
+      <a href="#cennik">Cennik</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#opinie">Opinie</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="#kontakt" class="nav__cta">Umów wizytę 🐾</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- =====================================================================
+     HERO
+     ===================================================================== -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+
+  <!-- pływające łapki -->
+  <div class="paw-float p1" aria-hidden="true">{{PAW}}</div>
+  <div class="paw-float p2" aria-hidden="true">{{PAW}}</div>
+  <div class="paw-float p3" aria-hidden="true">{{PAW}}</div>
+  <div class="paw-float p4" aria-hidden="true">{{PAW}}</div>
+
+  <div class="kontener">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <span class="eyebrow">🐾 Salon pielęgnacji · Jelenia Góra</span>
+        <h1 class="hero__title">
+          <span class="word">Radosny</span> <span class="word">Buldożek</span>
+        </h1>
+        <p class="hero__sub">Salon pielęgnacji psów i kotów <span class="pin">📍 Jelenia Góra</span> — gdzie każdy pupil wychodzi czysty, piękny i merdający ogonem!</p>
+
+        <div class="hero__pills">
+          <span class="hero__pill">✂️ Strzyżenie</span>
+          <span class="hero__pill">🛁 Kąpiel SPA</span>
+          <span class="hero__pill">🐱 Pielęgnacja kotów</span>
+          <span class="hero__pill">💅 Pazurki</span>
+        </div>
+
+        <div class="hero__cta-row">
+          <a href="#kontakt" class="btn btn--primary" id="heroCta">Umów wizytę 🐾</a>
+          <a href="#oferta" class="btn btn--ghost">Zobacz ofertę</a>
+        </div>
+      </div>
+
+      <!-- MASKOTKA: uśmiechnięty buldożek (inline SVG) -->
+      <div class="hero__mascot">
+        <div class="mascot-bubble">Hau! 🦴</div>
+        <div class="mascot-stage">
+          <svg viewBox="0 0 360 360" role="img" aria-label="Uśmiechnięty buldożek — maskotka salonu">
+            <!-- cień -->
+            <ellipse cx="180" cy="332" rx="96" ry="16" fill="#1E2A53" opacity=".12"/>
+
+            <!-- OGON (animowany — machanie) -->
+            <g class="tail" style="transform-origin:262px 250px">
+              <path d="M250 250 Q300 230 308 252 Q300 268 268 262 Z" fill="#E0A82E"/>
+            </g>
+
+            <!-- ciało -->
+            <ellipse cx="180" cy="262" rx="92" ry="78" fill="#FFC83D"/>
+            <ellipse cx="180" cy="286" rx="62" ry="50" fill="#FFF8EC"/>
+
+            <!-- łapy -->
+            <ellipse cx="138" cy="324" rx="22" ry="16" fill="#E0A82E"/>
+            <ellipse cx="222" cy="324" rx="22" ry="16" fill="#E0A82E"/>
+
+            <!-- uszy -->
+            <path d="M86 150 Q70 198 104 214 Q120 180 116 150 Z" fill="#1E2A53"/>
+            <path d="M274 150 Q290 198 256 214 Q240 180 244 150 Z" fill="#1E2A53"/>
+
+            <!-- głowa -->
+            <circle cx="180" cy="150" r="104" fill="#FFC83D"/>
+            <!-- pyszczek jaśniejszy -->
+            <ellipse cx="180" cy="178" rx="74" ry="62" fill="#FFF8EC"/>
+
+            <!-- fałdki policzki -->
+            <circle cx="120" cy="170" r="26" fill="#FFE08A"/>
+            <circle cx="240" cy="170" r="26" fill="#FFE08A"/>
+
+            <!-- oczy -->
+            <g class="eyes">
+              <circle cx="142" cy="138" r="17" fill="#fff"/>
+              <circle cx="218" cy="138" r="17" fill="#fff"/>
+              <circle cx="146" cy="140" r="9" fill="#1E2A53"/>
+              <circle cx="214" cy="140" r="9" fill="#1E2A53"/>
+              <circle cx="149" cy="137" r="3" fill="#fff"/>
+              <circle cx="217" cy="137" r="3" fill="#fff"/>
+            </g>
+            <!-- brwi -->
+            <path d="M126 116 Q142 108 160 116" stroke="#1E2A53" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M200 116 Q218 108 234 116" stroke="#1E2A53" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+            <!-- nos -->
+            <ellipse cx="180" cy="172" rx="20" ry="14" fill="#1E2A53"/>
+            <ellipse cx="174" cy="168" rx="5" ry="3.4" fill="#46577f"/>
+
+            <!-- uśmiech + język -->
+            <path d="M150 196 Q180 224 210 196" stroke="#1E2A53" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+            <path d="M168 208 Q180 230 192 208 Z" fill="#FF6B5E"/>
+            <!-- ząbki -->
+            <path d="M163 198 l5 9 l5 -9 Z" fill="#fff"/>
+            <path d="M187 198 l5 9 l5 -9 Z" fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     O NAS  (bento)
+     ===================================================================== -->
+<section class="about" id="o-nas">
+  <div class="kontener">
+    <div class="reveal">
+      <span class="eyebrow">🐶 Kilka słów o nas</span>
+      <h2 class="sekcja-tytul">Salon, w którym pupile <span class="hl">czują się jak w domu</span></h2>
+    </div>
+
+    <div class="bento" style="margin-top:26px">
+      <!-- duży kafelek z opisem -->
+      <div class="tile reveal" data-delay="1">
+        <h3>Z miłości do czterech łap 🐾</h3>
+        <!-- [DO PODMIANY] tekst o salonie -->
+        <p>Jesteśmy małym, rodzinnym salonem w sercu Jeleniej Góry. Od ponad ośmiu lat dbamy o to, by każdy pies i każdy kot wychodził od nas zadbany, pachnący i — co najważniejsze — radosny. Pracujemy bez pośpiechu, delikatnie i z ogromną cierpliwością, bo wiemy, że dla Twojego pupila to ma być przyjemność, a nie stres.</p>
+        <p style="margin-top:14px">Używamy wyłącznie hipoalergicznych, łagodnych kosmetyków, a stanowiska dezynfekujemy po każdym pupilu. Twój zwierzak jest u nas w dobrych, kochających rękach. 💛</p>
+      </div>
+
+      <!-- kafelek statystyka -->
+      <div class="tile tile--koral reveal" data-delay="2">
+        <div class="feature-ico">😻</div>
+        <div class="about__big"><span class="num">8</span><span style="font-size:.5em">lat doświadczenia w pielęgnacji</span></div>
+      </div>
+
+      <!-- kafelek cechy -->
+      <div class="tile tile--zolty reveal" data-delay="3">
+        <div class="feature-ico">🧴</div>
+        <h3>Łagodne kosmetyki</h3>
+        <p>Hipoalergiczne, bezpieczne dla skóry i sierści — także dla alergików.</p>
+      </div>
+
+      <div class="tile tile--mieta reveal" data-delay="1" style="grid-column:1/-1">
+        <div class="feature-ico">⏱️</div>
+        <h3>Bez stresu i bez pośpiechu</h3>
+        <p>Indywidualne podejście do każdego pupila — pracujemy w tempie zwierzaka, nie zegarka.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     OFERTA  (przełącznik PSY / KOTY)
+     ===================================================================== -->
+<section class="oferta" id="oferta">
+  <div class="kontener">
+    <div class="oferta__head reveal">
+      <span class="eyebrow">🐕 🐈 Nasze usługi</span>
+      <h2 class="sekcja-tytul">Oferta dla <span class="hl">psów i kotów</span></h2>
+      <p class="sekcja-opis">Wybierz swojego pupila i zobacz, co dla niego przygotowaliśmy.</p>
+
+      <!-- PRZEŁĄCZNIK -->
+      <div class="switch" id="ofertaSwitch" data-active="psy" role="tablist" aria-label="Wybierz gatunek">
+        <span class="switch__thumb" aria-hidden="true"></span>
+        <button class="switch__btn" data-tab="psy" role="tab" aria-selected="true"><span class="emo">🐶</span> Psy</button>
+        <button class="switch__btn" data-tab="koty" role="tab" aria-selected="false"><span class="emo">🐱</span> Koty</button>
+      </div>
+    </div>
+
+    <!-- ===== USŁUGI: PSY ===== -->
+    <div class="oferta-grid bento active" data-grid="psy" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <article class="usluga reveal" data-delay="1">
+        <div class="usluga__ico">🛁</div>
+        <h3>Kąpiel pielęgnacyjna</h3>
+        <p>Mycie, suszenie i rozczesywanie z kosmetykiem dobranym do sierści.</p>
+        <span class="usluga__cena"><small>od</small> 60 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="2">
+        <div class="usluga__ico">✂️</div>
+        <h3>Strzyżenie rasowe</h3>
+        <p>Strzyżenie maszynką i nożycami zgodnie z wzorcem rasy lub życzeniem.</p>
+        <span class="usluga__cena"><small>od</small> 90 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="3">
+        <div class="usluga__ico">🪮</div>
+        <h3>Trymowanie</h3>
+        <p>Ręczne trymowanie szorstkowłosych — zdrowa sierść i ładny kolor.</p>
+        <span class="usluga__cena"><small>od</small> 110 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="1">
+        <div class="usluga__ico">💅</div>
+        <h3>Pazurki i łapki</h3>
+        <p>Skracanie pazurów, wygładzanie i pielęgnacja opuszek.</p>
+        <span class="usluga__cena"><small>od</small> 25 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="2">
+        <div class="usluga__ico">🦷</div>
+        <h3>Higiena uszu i pyska</h3>
+        <p>Czyszczenie uszu, oczu i pielęgnacja okolic pyszczka.</p>
+        <span class="usluga__cena"><small>od</small> 30 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="3">
+        <div class="usluga__ico">🌿</div>
+        <h3>Pakiet RELAKS 🐶</h3>
+        <p>Kąpiel + strzyżenie + pazurki + masaż szczotką. Pełen reset!</p>
+        <span class="usluga__cena"><small>od</small> 150 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+    </div>
+
+    <!-- ===== USŁUGI: KOTY ===== -->
+    <div class="oferta-grid bento" data-grid="koty" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <article class="usluga reveal" data-delay="1">
+        <div class="usluga__ico">🛁</div>
+        <h3>Kąpiel dla kota</h3>
+        <p>Delikatna kąpiel w komfortowych warunkach, bez stresu dla kota.</p>
+        <span class="usluga__cena"><small>od</small> 80 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="2">
+        <div class="usluga__ico">🐈</div>
+        <h3>Wyczesywanie podszerstka</h3>
+        <p>Usuwanie martwej sierści — mniej kłaków w domu i zdrowsza skóra.</p>
+        <span class="usluga__cena"><small>od</small> 70 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="3">
+        <div class="usluga__ico">✂️</div>
+        <h3>Strzyżenie kota</h3>
+        <p>Strzyżenie sanitarne lub „lwie" — przy splątanej sierści ulga dla kota.</p>
+        <span class="usluga__cena"><small>od</small> 120 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="1">
+        <div class="usluga__ico">💅</div>
+        <h3>Pazurki kocie</h3>
+        <p>Bezpieczne skracanie pazurków przez doświadczoną groomerkę.</p>
+        <span class="usluga__cena"><small>od</small> 30 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="2">
+        <div class="usluga__ico">😺</div>
+        <h3>Pielęgnacja okolic oczu</h3>
+        <p>Czyszczenie oczu i uszu — szczególnie u ras perskich.</p>
+        <span class="usluga__cena"><small>od</small> 25 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+      <article class="usluga reveal" data-delay="3">
+        <div class="usluga__ico">🌿</div>
+        <h3>Pakiet RELAKS 🐱</h3>
+        <p>Kąpiel + wyczesywanie + pazurki + pielęgnacja oczu i uszu.</p>
+        <span class="usluga__cena"><small>od</small> 160 zł</span> <!-- [DO PODMIANY] -->
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     CENNIK
+     ===================================================================== -->
+<section class="cennik" id="cennik">
+  <div class="kontener">
+    <div class="reveal" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+      <span class="eyebrow">💛 Przejrzyste ceny</span>
+      <h2 class="sekcja-tytul">Wybierz <span class="hl">pakiet</span></h2>
+      <p class="sekcja-opis">Ceny orientacyjne — finalna zależy od rasy, wielkości i stanu sierści. Wycenę zawsze podamy przed wizytą.</p>
+    </div>
+
+    <div class="cennik__grid" style="margin-top:34px">
+      <!-- pakiet 1 -->
+      <div class="plan reveal" data-delay="1">
+        <h3>Maluch</h3>
+        <div class="plan__price">od 60<small> zł</small></div>
+        <p style="font-weight:700;color:#8a93b5">Małe rasy i koty do 5 kg</p>
+        <ul class="plan__list">
+          <li><span class="check">✓</span> Kąpiel i suszenie</li>
+          <li><span class="check">✓</span> Rozczesanie sierści</li>
+          <li><span class="check">✓</span> Pazurki w cenie</li>
+          <li><span class="check">✓</span> Perfumka na koniec 🌸</li>
+        </ul>
+        <a href="#kontakt" class="btn btn--ghost">Umów wizytę</a>
+      </div>
+
+      <!-- pakiet 2 — polecany -->
+      <div class="plan plan--polecany reveal" data-delay="2">
+        <span class="plan__tag">⭐ Najczęściej wybierany</span>
+        <h3>Pełen Glamour</h3>
+        <div class="plan__price">od 150<small> zł</small></div>
+        <p style="font-weight:700;color:#aab6e0">Komplet pielęgnacji od nosa po ogon</p>
+        <ul class="plan__list">
+          <li><span class="check">✓</span> Kąpiel + strzyżenie / trymowanie</li>
+          <li><span class="check">✓</span> Pazurki + higiena uszu i oczu</li>
+          <li><span class="check">✓</span> Masaż szczotką i stylizacja</li>
+          <li><span class="check">✓</span> Kokardka lub apaszka 🎀</li>
+        </ul>
+        <a href="#kontakt" class="btn btn--ghost">Umów wizytę</a>
+      </div>
+
+      <!-- pakiet 3 -->
+      <div class="plan reveal" data-delay="3">
+        <h3>Wielki Pies</h3>
+        <div class="plan__price">od 190<small> zł</small></div>
+        <p style="font-weight:700;color:#8a93b5">Duże rasy powyżej 25 kg</p>
+        <ul class="plan__list">
+          <li><span class="check">✓</span> Kąpiel głęboko oczyszczająca</li>
+          <li><span class="check">✓</span> Strzyżenie / wyczesywanie</li>
+          <li><span class="check">✓</span> Pazurki i opuszki</li>
+          <li><span class="check">✓</span> Suszenie i modelowanie</li>
+        </ul>
+        <a href="#kontakt" class="btn btn--ghost">Umów wizytę</a>
+      </div>
+    </div>
+    <p class="form-note" style="margin-top:18px">* Wszystkie ceny są przykładowe <strong>[DO PODMIANY]</strong>.</p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     GALERIA przed/po
+     ===================================================================== -->
+<section class="galeria" id="galeria">
+  <div class="kontener">
+    <div class="reveal" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+      <span class="eyebrow">📸 Metamorfozy</span>
+      <h2 class="sekcja-tytul">Galeria <span class="hl">przed / po</span></h2>
+      <p class="sekcja-opis">Kliknij zdjęcie, aby je powiększyć. Tych ogonów nie da się podrobić!</p>
+    </div>
+
+    <!-- [DO PODMIANY] zdjęcia placeholder z Unsplash -->
+    <div class="galeria__grid" style="margin-top:32px">
+      <figure class="gitem big reveal" data-delay="1" data-full="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=1200&q=80">
+        <span class="gitem__badge">PO ✨</span>
+        <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&q=80" alt="Zadbany pies po wizycie w salonie" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+      <figure class="gitem reveal" data-delay="2" data-full="https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=1200&q=80">
+        <span class="gitem__badge">Kot 🐱</span>
+        <img src="https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=600&q=80" alt="Zadbany kot" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+      <figure class="gitem reveal" data-delay="3" data-full="https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=1200&q=80">
+        <span class="gitem__badge">PO ✨</span>
+        <img src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=600&q=80" alt="Pies po strzyżeniu" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+      <figure class="gitem reveal" data-delay="1" data-full="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=1200&q=80">
+        <span class="gitem__badge">Kąpiel 🛁</span>
+        <img src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=600&q=80" alt="Pies podczas kąpieli" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+      <figure class="gitem reveal" data-delay="2" data-full="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=1200&q=80">
+        <span class="gitem__badge">Kot 🐱</span>
+        <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600&q=80" alt="Puszysty kot" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+      <figure class="gitem reveal" data-delay="3" data-full="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?w=1200&q=80">
+        <span class="gitem__badge">PO ✨</span>
+        <img src="https://images.unsplash.com/photo-1591768575198-88dac53fbd0a?w=600&q=80" alt="Mały pies po pielęgnacji" loading="lazy">
+        <span class="gitem__zoom"><span>🔍</span></span>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Powiększone zdjęcie">
+  <button class="lightbox__close" id="lbClose" aria-label="Zamknij">✕</button>
+  <button class="lightbox__nav prev" id="lbPrev" aria-label="Poprzednie">‹</button>
+  <img src="" alt="Powiększone zdjęcie z galerii" id="lbImg">
+  <button class="lightbox__nav next" id="lbNext" aria-label="Następne">›</button>
+</div>
+
+<!-- =====================================================================
+     STATYSTYKI
+     ===================================================================== -->
+<section class="staty">
+  <div class="kontener">
+    <div class="staty__box reveal">
+      <div style="text-align:center;margin-bottom:34px">
+        <span class="eyebrow" style="background:rgba(255,255,255,.12);color:#fff">🏆 Liczby, które mówią same za siebie</span>
+      </div>
+      <div class="staty__grid" id="staty">
+        <div class="stat">
+          <div class="stat__num" data-target="1500" data-suffix="+">0</div>
+          <div class="stat__label">zadowolonych pupili</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-target="8" data-suffix=" lat">0</div>
+          <div class="stat__label">na rynku w Jeleniej Górze</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-target="100" data-suffix="%">0</div>
+          <div class="stat__label">łagodnych kosmetyków</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num" data-target="4980" data-suffix="">0</div>
+          <div class="stat__label">rozczesanych kłaków 😅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     OPINIE
+     ===================================================================== -->
+<section class="opinie" id="opinie">
+  <div class="kontener">
+    <div class="reveal" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+      <span class="eyebrow">⭐ Opinie klientów</span>
+      <h2 class="sekcja-tytul">Co mówią <span class="hl">ogony i ich opiekunowie</span></h2>
+    </div>
+
+    <div class="opinie__grid" style="margin-top:32px">
+      <!-- [DO PODMIANY] opinie -->
+      <div class="opinia reveal" data-delay="1">
+        <div class="opinia__quote">”</div>
+        <div class="opinia__stars" aria-label="5 na 5 gwiazdek">★★★★★</div>
+        <p>„Nasza Frania wraca od Pani zawsze piękna i odprężona. Wcześniej bała się groomera, a tu wchodzi machając ogonem. Polecam całym sercem!"</p>
+        <div class="opinia__autor">
+          <span class="opinia__av">AK</span>
+          <span><b>Anna K.</b><small>opiekunka cocker spaniela</small></span>
+        </div>
+      </div>
+
+      <div class="opinia reveal" data-delay="2">
+        <div class="opinia__quote">”</div>
+        <div class="opinia__stars" aria-label="5 na 5 gwiazdek">★★★★★</div>
+        <p>„Mój kot Borys nie znosi kąpieli, ale tutaj poszło zaskakująco spokojnie. Profesjonalnie, czysto i z ogromną cierpliwością do zwierząt."</p>
+        <div class="opinia__autor">
+          <span class="opinia__av">MW</span>
+          <span><b>Marek W.</b><small>opiekun kota brytyjskiego</small></span>
+        </div>
+      </div>
+
+      <div class="opinia reveal" data-delay="3">
+        <div class="opinia__quote">”</div>
+        <div class="opinia__stars" aria-label="5 na 5 gwiazdek">★★★★★</div>
+        <p>„Najlepszy salon w Jeleniej Górze! Umówienie wizyty bezproblemowe, ceny uczciwe, a nasz sznaucer wygląda jak z wystawy. Wrócimy na pewno."</p>
+        <div class="opinia__autor">
+          <span class="opinia__av">JZ</span>
+          <span><b>Joanna Z.</b><small>opiekunka sznaucera</small></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     REZERWACJA / KONTAKT
+     ===================================================================== -->
+<section class="rezerwacja" id="kontakt">
+  <div class="kontener">
+    <div class="reveal" style="text-align:center;display:flex;flex-direction:column;align-items:center">
+      <span class="eyebrow">📅 Rezerwacja</span>
+      <h2 class="sekcja-tytul">Umów <span class="hl">wizytę</span></h2>
+      <p class="sekcja-opis">Wypełnij formularz, a oddzwonimy, by potwierdzić termin. To tylko demo — formularz nic nie wysyła.</p>
+    </div>
+
+    <div class="rez__grid" style="margin-top:32px">
+      <!-- FORMULARZ -->
+      <div class="form-card reveal" data-delay="1">
+        <form id="rezForm" novalidate>
+          <div class="form-row dwa">
+            <div class="field">
+              <label for="imie">Imię i nazwisko <span class="req">*</span></label>
+              <input type="text" id="imie" name="imie" placeholder="np. Katarzyna Nowak" required>
+              <span class="field__err">Podaj imię i nazwisko.</span>
+            </div>
+            <div class="field">
+              <label for="telefon">Telefon <span class="req">*</span></label>
+              <input type="tel" id="telefon" name="telefon" placeholder="np. 600 123 456" required>
+              <span class="field__err">Podaj poprawny numer (min. 9 cyfr).</span>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:16px">
+            <label>Gatunek pupila <span class="req">*</span></label>
+            <div class="gatunek">
+              <input type="radio" id="g-pies" name="gatunek" value="pies" checked>
+              <label for="g-pies"><span class="emo">🐶</span> Pies</label>
+              <input type="radio" id="g-kot" name="gatunek" value="kot">
+              <label for="g-kot"><span class="emo">🐱</span> Kot</label>
+            </div>
+          </div>
+
+          <div class="form-row dwa" style="margin-top:16px">
+            <div class="field">
+              <label for="rasa">Rasa</label>
+              <input type="text" id="rasa" name="rasa" placeholder="np. Yorkshire terrier">
+            </div>
+            <div class="field">
+              <label for="usluga">Usługa <span class="req">*</span></label>
+              <select id="usluga" name="usluga" required>
+                <option value="">— wybierz —</option>
+                <option>Kąpiel pielęgnacyjna</option>
+                <option>Strzyżenie</option>
+                <option>Trymowanie</option>
+                <option>Pazurki i łapki</option>
+                <option>Wyczesywanie podszerstka (kot)</option>
+                <option>Pakiet RELAKS</option>
+                <option>Inna / nie wiem — doradźcie</option>
+              </select>
+              <span class="field__err">Wybierz usługę.</span>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:16px">
+            <label for="termin">Preferowany termin <span class="req">*</span></label>
+            <input type="date" id="termin" name="termin" required>
+            <span class="field__err">Wybierz termin wizyty.</span>
+          </div>
+
+          <button type="submit" class="btn btn--primary" id="rezSubmit" style="margin-top:22px">Wyślij zgłoszenie 🐾</button>
+          <p class="form-note">Klikając „Wyślij", akceptujesz kontakt telefoniczny w sprawie wizyty. <strong>[DEMO — bez backendu]</strong></p>
+        </form>
+
+        <!-- komunikat sukcesu -->
+        <div class="form-ok" id="formOk">
+          <div class="ok-emo">🎉🐶</div>
+          <h3>Dziękujemy!</h3>
+          <p>Twoje zgłoszenie zostało przyjęte. Oddzwonimy, by potwierdzić termin. (To demo — nic nie zostało faktycznie wysłane.)</p>
+          <button class="btn btn--ghost" id="formReset" style="margin-top:18px">Wyślij kolejne</button>
+        </div>
+      </div>
+
+      <!-- DANE KONTAKTOWE + MAPA -->
+      <div class="kontakt-info">
+        <div class="info-card reveal" data-delay="2">
+          <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:14px">Zajrzyj do nas 🏠</h3>
+          <ul class="info-list">
+            <!-- [DO PODMIANY] dane kontaktowe -->
+            <li><span class="ico">📍</span><span><b>ul. Pielęgnacyjna 12</b><small>58-500 Jelenia Góra</small></span></li>
+            <li><span class="ico">📞</span><span><b>+48 600 123 456</b><small>pon.–sob. w godzinach pracy</small></span></li>
+            <li><span class="ico">✉️</span><span><b>kontakt@radosnybuldozek.pl</b><small>odpowiadamy w 24h</small></span></li>
+          </ul>
+        </div>
+
+        <div class="mapa reveal" data-delay="3">
+          <!-- [DO PODMIANY] osadź mapę Google Maps (iframe) z adresem salonu -->
+          <span>🗺️ Tu pojawi się mapa<br>ul. Pielęgnacyjna 12, Jelenia Góra</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =====================================================================
+     STOPKA
+     ===================================================================== -->
+<footer class="stopka">
+  <div class="kontener stopka__grid">
+    <div>
+      <div class="stopka__brand">
+        <span class="brand__logo">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" fill="#FFC83D"/>
+            <ellipse cx="18" cy="22" rx="9" ry="11" fill="#FF6B5E"/>
+            <ellipse cx="46" cy="22" rx="9" ry="11" fill="#FF6B5E"/>
+            <circle cx="32" cy="34" r="20" fill="#FFF8EC"/>
+            <circle cx="24" cy="30" r="3.4" fill="#1E2A53"/>
+            <circle cx="40" cy="30" r="3.4" fill="#1E2A53"/>
+            <ellipse cx="32" cy="40" rx="5" ry="3.6" fill="#FF6B5E"/>
+            <path d="M26 46 Q32 51 38 46" stroke="#1E2A53" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+        Radosny Buldożek
+      </div>
+      <p style="margin-top:14px;max-width:30ch">Salon pielęgnacji psów i kotów w Jeleniej Górze. Czysto, radośnie i z miłością do zwierząt. 🐾</p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook" title="Facebook">📘</a>
+        <a href="#" aria-label="Instagram" title="Instagram">📷</a>
+        <a href="#" aria-label="TikTok" title="TikTok">🎵</a>
+      </div>
+    </div>
+
+    <div>
+      <h4>Godziny otwarcia</h4>
+      <!-- [DO PODMIANY] godziny -->
+      <ul class="godziny">
+        <li><span class="dz">Pon – Pt</span><span>9:00 – 18:00</span></li>
+        <li><span class="dz">Sobota</span><span>9:00 – 14:00</span></li>
+        <li><span class="dz">Niedziela</span><span>nieczynne</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Szybkie linki</h4>
+      <nav class="foot-links" aria-label="Stopka — nawigacja">
+        <a href="#o-nas">O nas</a>
+        <a href="#oferta">Oferta</a>
+        <a href="#cennik">Cennik</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#kontakt">Umów wizytę</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="kontener copyright">
+    © <span id="rok"></span> <b>Radosny Buldożek</b> · Jelenia Góra · Wszelkie prawa zastrzeżone. &nbsp;|&nbsp; Demo strony — dane są przykładowe <strong>[DO PODMIANY]</strong>.
+  </div>
+</footer>
+
+<!-- canvas na confetti/łapki przy CTA -->
+<canvas id="confetti"></canvas>
+
+<script>
+/* =========================================================================
+   JS — wszystko czyste, bez zależności.
+   Respektuje prefers-reduced-motion.
+   ========================================================================= */
+(function(){
+  "use strict";
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 0. Wstrzyknięcie SVG łapki do tła + animowany ogon ---------- */
+  const pawSVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="20" r="8"/><circle cx="44" cy="18" r="8"/><circle cx="10" cy="38" r="7"/><circle cx="54" cy="36" r="7"/><path d="M32 30c10 0 18 8 18 17 0 7-8 9-18 9s-18-2-18-9c0-9 8-17 18-17z"/></svg>';
+  document.querySelectorAll('.paw-float').forEach(function(el){
+    el.innerHTML = el.innerHTML.replace('{{PAW}}', pawSVG);
+    if(el.innerHTML.indexOf('{{PAW}}')!==-1){ el.innerHTML = pawSVG; }
+  });
+  // fallback gdyby placeholder pozostał
+  document.querySelectorAll('.paw-float').forEach(function(el){
+    if(!el.querySelector('svg')) el.innerHTML = pawSVG;
+  });
+
+  // animacja ogona (CSS keyframes wstrzyknięte tu, żeby zależały od reduceMotion)
+  if(!reduceMotion){
+    const tail = document.querySelector('.tail');
+    if(tail){
+      const style = document.createElement('style');
+      style.textContent = '@keyframes wag{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(16deg)}} .tail{animation:wag 0.6s ease-in-out infinite}';
+      document.head.appendChild(style);
+    }
+  }
+
+  /* ---------- 1. Rok w stopce ---------- */
+  document.getElementById('rok').textContent = new Date().getFullYear();
+
+  /* ---------- 2. Nav: cień przy scrollu + menu mobilne ---------- */
+  const nav = document.getElementById('nav');
+  const onScroll = function(){ nav.classList.toggle('scrolled', window.scrollY > 12); };
+  onScroll();
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', function(){
+    const open = mobileMenu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true':'false');
+  });
+  // zamknij menu po kliknięciu linku
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      mobileMenu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    });
+  });
+
+  /* ---------- 3. Scroll-reveal (IntersectionObserver) ---------- */
+  const reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    const io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- 4. Przełącznik OFERTA: psy / koty ---------- */
+  const ofSwitch = document.getElementById('ofertaSwitch');
+  const grids = document.querySelectorAll('.oferta-grid');
+  ofSwitch.querySelectorAll('.switch__btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const tab = btn.dataset.tab;
+      ofSwitch.dataset.active = tab;
+      ofSwitch.querySelectorAll('.switch__btn').forEach(function(b){
+        b.setAttribute('aria-selected', b.dataset.tab===tab ? 'true':'false');
+      });
+      grids.forEach(function(g){
+        const on = g.dataset.grid===tab;
+        g.classList.toggle('active', on);
+        // re-trigger reveal dla świeżo pokazanych kafelków
+        if(on){
+          g.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+        }
+      });
+    });
+  });
+
+  /* ---------- 5. Animowane liczniki ---------- */
+  const counters = document.querySelectorAll('.stat__num');
+  const animateCount = function(el){
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    if(reduceMotion){ el.textContent = target.toLocaleString('pl-PL') + suffix; return; }
+    const dur = 1600;
+    const start = performance.now();
+    const step = function(now){
+      const p = Math.min((now-start)/dur, 1);
+      const eased = 1 - Math.pow(1-p, 3); // easeOutCubic
+      const val = Math.floor(eased * target);
+      el.textContent = val.toLocaleString('pl-PL') + suffix;
+      if(p<1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('pl-PL') + suffix;
+    };
+    requestAnimationFrame(step);
+  };
+  if('IntersectionObserver' in window){
+    const statyBox = document.getElementById('staty');
+    const sObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          counters.forEach(animateCount);
+          sObs.disconnect();
+        }
+      });
+    }, {threshold:0.4});
+    if(statyBox) sObs.observe(statyBox);
+  } else {
+    counters.forEach(animateCount);
+  }
+
+  /* ---------- 6. Lightbox galerii ---------- */
+  const items = Array.from(document.querySelectorAll('.gitem'));
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  let current = 0;
+  const openLB = function(i){
+    current = i;
+    lbImg.src = items[i].dataset.full;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  };
+  const closeLB = function(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  };
+  const navLB = function(dir){
+    current = (current + dir + items.length) % items.length;
+    lbImg.src = items[current].dataset.full;
+  };
+  items.forEach(function(it,i){
+    it.addEventListener('click', function(){ openLB(i); });
+    it.setAttribute('tabindex','0');
+    it.setAttribute('role','button');
+    it.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLB(i); } });
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLB);
+  document.getElementById('lbPrev').addEventListener('click', function(){ navLB(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ navLB(1); });
+  lightbox.addEventListener('click', function(e){ if(e.target===lightbox) closeLB(); });
+  document.addEventListener('keydown', function(e){
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key==='Escape') closeLB();
+    if(e.key==='ArrowLeft') navLB(-1);
+    if(e.key==='ArrowRight') navLB(1);
+  });
+
+  /* ---------- 7. Walidacja formularza ---------- */
+  const form = document.getElementById('rezForm');
+  const formOk = document.getElementById('formOk');
+  const setErr = function(field, on){ field.classList.toggle('invalid', on); };
+
+  const validators = {
+    imie: function(v){ return v.trim().length >= 3; },
+    telefon: function(v){ return (v.replace(/\D/g,'').length >= 9); },
+    usluga: function(v){ return v.trim() !== ''; },
+    termin: function(v){ return v.trim() !== ''; }
+  };
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    let ok = true;
+    Object.keys(validators).forEach(function(name){
+      const input = form.elements[name];
+      const field = input.closest('.field');
+      const valid = validators[name](input.value);
+      setErr(field, !valid);
+      if(!valid && ok){ input.focus(); }
+      if(!valid) ok = false;
+    });
+    if(!ok) return;
+
+    // sukces
+    form.style.display = 'none';
+    formOk.classList.add('show');
+    // confetti świętowania
+    launchConfetti();
+  });
+
+  // czyść błąd przy wpisywaniu
+  form.querySelectorAll('input,select').forEach(function(el){
+    el.addEventListener('input', function(){
+      const field = el.closest('.field');
+      if(field) field.classList.remove('invalid');
+    });
+  });
+
+  document.getElementById('formReset').addEventListener('click', function(){
+    form.reset();
+    formOk.classList.remove('show');
+    form.style.display = '';
+  });
+
+  // ustaw min daty = dziś
+  const termin = document.getElementById('termin');
+  if(termin){ termin.min = new Date().toISOString().split('T')[0]; }
+
+  /* ---------- 8. Confetti / łapki przy CTA (czysty canvas) ---------- */
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let parts = [];
+  let rafId = null;
+  const colors = ['#FFC83D','#FF6B5E','#46C7A8','#FF9FB2','#1E2A53'];
+
+  const resize = function(){ canvas.width = innerWidth; canvas.height = innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+
+  const spawn = function(x,y,n){
+    for(let i=0;i<n;i++){
+      parts.push({
+        x:x, y:y,
+        vx:(Math.random()-0.5)*9,
+        vy:(Math.random()*-9)-3,
+        g:0.28+Math.random()*0.12,
+        size:7+Math.random()*8,
+        rot:Math.random()*Math.PI,
+        vr:(Math.random()-0.5)*0.3,
+        color:colors[(Math.random()*colors.length)|0],
+        paw:Math.random()<0.45,
+        life:1
+      });
+    }
+  };
+
+  const draw = function(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    parts.forEach(function(p){
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= 0.008;
+      ctx.save();
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.max(p.life,0);
+      ctx.fillStyle = p.color;
+      if(p.paw){
+        // mała łapka: 4 paluszki + poduszka
+        const s=p.size/9;
+        ctx.beginPath();
+        ctx.arc(-3*s,-3*s,2*s,0,7); ctx.arc(3*s,-3*s,2*s,0,7);
+        ctx.arc(-6*s,0,1.8*s,0,7); ctx.arc(6*s,0,1.8*s,0,7);
+        ctx.fill();
+        ctx.beginPath(); ctx.ellipse(0,2*s,4*s,3.2*s,0,0,7); ctx.fill();
+      } else {
+        ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+      }
+      ctx.restore();
+    });
+    parts = parts.filter(function(p){ return p.life>0 && p.y < canvas.height+40; });
+    if(parts.length>0){ rafId = requestAnimationFrame(draw); }
+    else { ctx.clearRect(0,0,canvas.width,canvas.height); rafId=null; }
+  };
+
+  const launchConfetti = function(originEl){
+    if(reduceMotion) return;
+    let x = innerWidth/2, y = innerHeight*0.35;
+    if(originEl){
+      const r = originEl.getBoundingClientRect();
+      x = r.left + r.width/2; y = r.top + r.height/2;
+    }
+    spawn(x,y,70);
+    if(!rafId) rafId = requestAnimationFrame(draw);
+  };
+
+  // CTA w hero
+  const heroCta = document.getElementById('heroCta');
+  if(heroCta){
+    heroCta.addEventListener('click', function(){ launchConfetti(heroCta); });
+  }
+  // wszystkie przyciski "Umów wizytę" w cenniku/nawigacji też sypią łapkami
+  document.querySelectorAll('a[href="#kontakt"]').forEach(function(a){
+    a.addEventListener('click', function(){ launchConfetti(a); });
+  });
+
+})();
+</script>
+</body>
+</html>
